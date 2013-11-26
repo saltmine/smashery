@@ -23,19 +23,22 @@ def start(host=LISTEN_ADDRESS, port=PORT, use_debugger=True):
   app.run(host, port, use_debugger)
 
 
-@app.route('/<service>/<endpoint>/')
-def v2_dispatch(service, enpoint):
-  print "AIYEEEE"
+@app.route('/<service>/<endpoint>/<method>')
+def v2_dispatch(service, endpoint, method):
   if service not in settings['service_map']:
-
     abort(404)
+
+  # Check for forced errors
   
   proxy_target  = settings['target_url']
   proxy_service = settings['service_map'][service]
-  proxy_url = '/'.join([proxy_target, proxy_service, endpoint])
+  proxy_url = '/'.join([proxy_target, proxy_service, endpoint, method])
   print "Remapping to: %s" % proxy_url
+
+  # Do Oauth2 stuff
+
   internal = requests.get(proxy_url)
-  return r.text
+  return internal.text
 
 
 if __name__ == "__main__":
