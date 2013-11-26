@@ -1,0 +1,4 @@
+target_url: http://ol.com:5000
+
+service_map:
+  v2: service/2.0

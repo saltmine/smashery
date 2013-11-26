@@ -1,0 +1,4 @@
+Flask==0.10.1
+redis==2.8.0
+PyYAML==3.10
+requests==2.0.1
