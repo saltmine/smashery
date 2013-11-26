@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 """Main app file for interacting with the Smashery proxy"""
 
-from flask import Flask
+from flask import Flask, request as R
 import requests
 from config import settings
+import oauth2
 
 PORT = 5555
 LISTEN_ADDRESS = '0.0.0.0'
@@ -36,8 +37,16 @@ def v2_dispatch(service, endpoint, method):
   print "Remapping to: %s" % proxy_url
 
   # Do Oauth2 stuff
+  bearer_string = R.headers.get('Authorization')
+  user_data = None
+  if bearer_string:
+    # Format of "Bearer <access_token>"
+    access_token = bearer_string.split()[1]
+    user_data = oauth2.lookup_token(access_token)
 
-  internal = requests.get(proxy_url)
+  
+  internal = requests.get(proxy_url, headers=dict(user_data.items()
+                                                  + R.headers.items()))
   return internal.text
 
 
