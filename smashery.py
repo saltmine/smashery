@@ -42,8 +42,8 @@ def v2_dispatch(service, endpoint, method):
   if bearer_string:
     # Format of "Bearer <access_token>"
     access_token = bearer_string.split()[1]
+    print "Got access token: %s" % access_token
     user_data = oauth2.lookup_token(access_token)
-
   
   internal = requests.get(proxy_url, headers=dict(user_data.items()
                                                   + R.headers.items()))
