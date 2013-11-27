@@ -1,6 +1,5 @@
 """Global smashery config"""
 
-
 import yaml
 import os
 
